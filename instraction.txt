@@ -1,0 +1,7 @@
+1) Install NodeJS
+#Check "npm --version" , "npx --version" & "node --version" command in cmd
+
+2) npm install
+
+3) npm start
+
