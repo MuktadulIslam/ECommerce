@@ -1,31 +1,51 @@
 import React, { useState, useEffect } from 'react'
+import $ from 'jquery';
 
-export default function Header2() {
-    const [searchSlideberActiveClass, setSearchSlideberActiveClass] = useState("");
-    const [miniCartSlideberActiveClass, setMiniCartSlideberActiveClass] = useState("");
-    const [mobileMenuSlideberActiveClass, setMobileMenuSlideberActiveClass] = useState("");
+export default function Header() {
 
+    useEffect(() => {
+        // Search
+        $('.header-search-icon i').click(function () {
+            $('.f_header_search_canvas, .off_canvars_overlay').addClass('active');
+        });
+        $('.search_close, .off_canvars_overlay').click(function () {
+            $('.f_header_search_canvas, .off_canvars_overlay').removeClass('active');
+        });
 
-    const handleClick = (event) => {
-        event.preventDefault();
-        // event.target.classList.remove("menu-item-has-children");
-        if(event.currentTarget.className == "menu-open") event.currentTarget.className = "menu-item-has-children";
-        else event.currentTarget.className= "menu-open";
-        // const id = event.currentTarget.id;
-        // console.log('hi');
+        // MinCart
+        $('.mini-cart-icon').on('click', function () {
+            $('.off_canvars_overlay, .mini-cart-area').addClass('active')
+        });
+        $('.mini-cart-close,.off_canvars_overlay').on('click', function () {
+            $('.mini-cart-area,.off_canvars_overlay').removeClass('active')
+        });
 
-        // if (id == 'page') {
-        //     console.log('hello');
-        //     if (document.getElementById("page").style.display == "menu-item-has-children") {
-        //         document.getElementById("page").className = "menu-item-has-children menu-open";
-        //     }
-        //     else {
-        //         document.getElementById("page").className = "menu-item-has-children";
-        //     }
-        // }
-    };
+        /*---for showing menu items in mobile view ---*/
+        $('.canvas_open').on('click', function () {
+            $('.offcanvas_menu_wrapper,.off_canvars_overlay').addClass('active');
+            $('.offcanvas_main_menu').find('.sub-menu').slideUp('fast');
+        });
 
+        $('.canvas_close,.off_canvars_overlay').on('click', function () {
+            $('.offcanvas_menu_wrapper,.off_canvars_overlay').removeClass('active');
+        });
 
+        $('.offcanvas_main_menu').off('click').on('click', 'li a, li .menu-expand', function (e) {
+            var $this = $(this);
+            if ($this.parent().attr('class').match('menu-item-has-children')) {
+                e.preventDefault();
+                if ($this.siblings('ul:visible').length) {
+                    $this.siblings('ul').slideUp('slow');
+                    $this.parent().removeClass('menu-open');
+                } else {
+                    $this.closest('li').siblings('li').find('ul:visible').slideUp('slow');
+                    $this.siblings('ul').slideDown('slow');
+                    $this.parent().addClass('menu-open');
+                    $this.parent().siblings('li').removeClass('menu-open');
+                }
+            }
+        });
+    }, []);
 
 
     return (
@@ -39,7 +59,7 @@ export default function Header2() {
                             {/* Top Left */}
                             <div className="col-lg-6">
                                 <div className="hl_top-left">
-                                    <span><i className="bi bi-envelope"></i> info12@example.com</span>
+                                    <span><i className="bi bi-envelope"></i> bsse1215@iit.du.ac.bd</span>
                                     <span><i className="bi bi-geo-alt"></i> California, TX 70240</span>
                                 </div>
                             </div>
@@ -93,7 +113,7 @@ export default function Header2() {
                                 {/* Header Bottom Right */}
                                 <div className="header-bright">
                                     <div className="mobile-bar">
-                                        <div className="canvas_open" onClick={() => setMobileMenuSlideberActiveClass('active')}>
+                                        <div className="canvas_open">
                                             <a>
                                                 <span></span>
                                                 <span></span>
@@ -102,7 +122,7 @@ export default function Header2() {
                                         </div>
                                     </div>
                                     {/* Cart Icon */}
-                                    <div className="mini-cart-icon" title="Cart" onClick={() => setMiniCartSlideberActiveClass('active')}>
+                                    <div className="mini-cart-icon" title="Cart">
                                         <a href="#">
                                             <i className="bi bi-cart3"></i>
                                             <span>2</span>
@@ -116,7 +136,7 @@ export default function Header2() {
                                         </a>
                                     </div>
                                     {/* Header Search */}
-                                    <div className="header-search" onClick={() => setSearchSlideberActiveClass('active')}>
+                                    <div className="header-search">
                                         <div className="header-search-icon" title="Search">
                                             <i className="bi bi-search"></i>
                                         </div>
@@ -213,13 +233,13 @@ export default function Header2() {
             <div className="mobile-menu-area">
 
                 {/* offcanvas menu area start */}
-                <div className={"off_canvars_overlay " + mobileMenuSlideberActiveClass}>
+                <div className="off_canvars_overlay">
 
                 </div>
                 <div className="offcanvas_menu">
-                    <div className={"offcanvas_menu_wrapper " + mobileMenuSlideberActiveClass}>
-                        <div className="canvas_close" onClick={() => setMobileMenuSlideberActiveClass('')}>
-                            <a href="javascript:void(0)"><i className="fas fa-times"></i></a>
+                    <div className="offcanvas_menu_wrapper">
+                        <div className="canvas_close">
+                            <a><i className="fas fa-times"></i></a>
                         </div>
                         <div className="mobile-logo">
                             <a href="index.html">
@@ -235,7 +255,7 @@ export default function Header2() {
                                     <a href="about.html"> About Us</a>
                                 </li>
 
-                                <li className="menu-item-has-children" onClick={handleClick}>
+                                <li className="menu-item-has-children">
                                     <span className='menu-expand'>
                                         <i className="bi bi-chevron-down"></i>
                                     </span>
@@ -243,6 +263,9 @@ export default function Header2() {
                                     <a href="#">Page</a>
                                     <ul className="sub-menu" >
                                         <li className="menu-item-has-children">
+                                            <span className='menu-expand'>
+                                                <i className="bi bi-chevron-down"></i>
+                                            </span>
                                             <a href="#">Team</a>
                                             <ul className="sub-menu">
                                                 <li><a href="team.html">Team Styel 1</a></li>
@@ -252,6 +275,9 @@ export default function Header2() {
                                         <li><a href="about.html">About Us</a></li>
                                         <li><a href="pricing.html">Pricing Plane</a></li>
                                         <li className="menu-item-has-children">
+                                            <span className='menu-expand'>
+                                                <i className="bi bi-chevron-down"></i>
+                                            </span>
                                             <a href="#">Services</a>
                                             <ul className="sub-menu">
                                                 <li><a href="services.html">Services</a></li>
@@ -259,6 +285,9 @@ export default function Header2() {
                                             </ul>
                                         </li>
                                         <li className="menu-item-has-children">
+                                            <span className='menu-expand'>
+                                                <i className="bi bi-chevron-down"></i>
+                                            </span>
                                             <a href="#">Portfolio</a>
                                             <ul className="sub-menu">
                                                 <li><a href="porfolio.html">Portfolio</a></li>
@@ -266,6 +295,9 @@ export default function Header2() {
                                             </ul>
                                         </li>
                                         <li className="menu-item-has-children">
+                                            <span className='menu-expand'>
+                                                <i className="bi bi-chevron-down"></i>
+                                            </span>
                                             <a href="#">Shop</a>
                                             <ul className="sub-menu">
                                                 <li><a href="cart.html">Cart</a></li>
@@ -274,6 +306,9 @@ export default function Header2() {
                                             </ul>
                                         </li>
                                         <li className="menu-item-has-children">
+                                            <span className='menu-expand'>
+                                                <i className="bi bi-chevron-down"></i>
+                                            </span>
                                             <a href="#">User</a>
                                             <ul className="sub-menu">
                                                 <li><a href="login.html">Login</a></li>
@@ -287,7 +322,7 @@ export default function Header2() {
                                     </ul>
                                 </li>
 
-                                <li className="menu-item-has-children" onClick={handleClick}>
+                                <li className="menu-item-has-children">
                                     <span className='menu-expand'>
                                         <i className="bi bi-chevron-down"></i>
                                     </span>
@@ -302,7 +337,7 @@ export default function Header2() {
                                     </ul>
                                 </li>
 
-                                <li className="menu-item-has-children" onClick={handleClick}>
+                                <li className="menu-item-has-children">
                                     <span className='menu-expand'>
                                         <i className="bi bi-chevron-down"></i>
                                     </span>
@@ -325,11 +360,11 @@ export default function Header2() {
 
 
             {/*  Start Header Search  */}
-            <div className={"f_header_search_canvas" + searchSlideberActiveClass}>
+            <div className="f_header_search_canvas">
                 <div className="f_header_search_canvas-full">
                     <div className="f_header">
                         <h2>Search</h2>
-                        <div className="search_close" onClick={() => setSearchSlideberActiveClass('')}>
+                        <div className="search_close">
                             <i className="fas fa-times"></i>
                         </div>
                     </div>
@@ -416,12 +451,12 @@ export default function Header2() {
 
 
             {/*  Start MiniCart Area  */}
-            <div className={"mini-cart-area" + miniCartSlideberActiveClass}>
+            <div className="mini-cart-area">
                 <div className="mini-cart-full">
                     {/*  Header  */}
                     <div className="mini-cart-header">
                         <h2>Shopping cart</h2>
-                        <div className="mini-cart-close" onClick={() => setMiniCartSlideberActiveClass('')}>
+                        <div className="mini-cart-close">
                             <i className="bi bi-x"></i>
                         </div>
                     </div>
@@ -442,7 +477,7 @@ export default function Header2() {
                                             <span>$39 x 2</span>
                                         </div>
                                         <div className="remove">
-                                            <a href="javascript:void(0);"><i className="bi bi-x"></i></a>
+                                            <a><i className="bi bi-x"></i></a>
                                         </div>
                                     </div>
                                 </li>
@@ -459,7 +494,7 @@ export default function Header2() {
                                             <span>$39 x 2</span>
                                         </div>
                                         <div className="remove">
-                                            <a href="javascript:void(0);"><i className="bi bi-x"></i></a>
+                                            <a><i className="bi bi-x"></i></a>
                                         </div>
                                     </div>
                                 </li>
@@ -476,7 +511,7 @@ export default function Header2() {
                                             <span>$39 x 2</span>
                                         </div>
                                         <div className="remove">
-                                            <a href="javascript:void(0);"><i className="bi bi-x"></i></a>
+                                            <a><i className="bi bi-x"></i></a>
                                         </div>
                                     </div>
                                 </li>
